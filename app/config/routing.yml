@@ -1,0 +1,8 @@
+app:
+    resource: "@AppBundle/Controller/"
+    type:     annotation
+
+
+tut_doctrine:
+    path: /test
+    defaults: { _controller: "DoctBundle:Doctrine:index" }
