@@ -15,10 +15,10 @@ use Doctrine\ORM\Mapping as ORM;
  * Class Article
  * @package DoctBundle\Entity
  * @ORM\Entity
- * @ORM\Table(name="category")
+ * @ORM\Table(name="tags")
  */
 
-class Category {
+class Tags {
 
 
   /**
@@ -34,15 +34,12 @@ class Category {
    */
   private $name;
 
-  /**
-   * @ORM\OneToOne(targetEntity="Article", mappedBy="category")
-   */
-  private $article;
 
   /**
-   * @ORM\OneToOne(targetEntity="News", mappedBy="category")
+   * @ORM\ManyToOne(targetEntity="Article", inversedBy="tags")
+   * @ORM\JoinColumn(name="article_id", referencedColumnName="id")
    */
-  private $news;
+  private $article;
 
     /**
      * Get id
@@ -59,7 +56,7 @@ class Category {
      *
      * @param string $name
      *
-     * @return Category
+     * @return Tags
      */
     public function setName($name)
     {
@@ -78,12 +75,14 @@ class Category {
         return $this->name;
     }
 
+
+
     /**
      * Set article
      *
      * @param \DoctBundle\Entity\Article $article
      *
-     * @return Category
+     * @return Tags
      */
     public function setArticle(\DoctBundle\Entity\Article $article = null)
     {

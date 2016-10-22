@@ -1,13 +1,8 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: pavel
- * Date: 10/14/2016
- * Time: 9:20 AM
- */
 
 namespace DoctBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 
@@ -52,6 +47,16 @@ class Article {
 
 
   /**
+   * @ORM\OneToMany(targetEntity="Tags", mappedBy="article", cascade={"persist", "remove"})
+   */
+
+  private $tags;
+
+
+
+
+
+  /**
    * @ORM\OneToOne(targetEntity="Article")
    * @ORM\JoinColumn(name="article", referencedColumnName="id")
    */
@@ -59,6 +64,9 @@ class Article {
 
 
   public function __construct() {
+    $this->tags = new ArrayCollection();
+
+
     $this->created = new \DateTime();
     $this->updated = new \DateTime();
   }
@@ -192,5 +200,42 @@ class Article {
     public function getParent()
     {
         return $this->parent;
+    }
+
+
+
+    /**
+     * Add tag
+     *
+     * @param \DoctBundle\Entity\Tags $tag
+     *
+     * @return Article
+     */
+    public function addTag(\DoctBundle\Entity\Tags $tag)
+    {
+        $this->tags[] = $tag;
+        $tag->setArticle($this);
+
+        return $this;
+    }
+
+    /**
+     * Remove tag
+     *
+     * @param \DoctBundle\Entity\Tags $tag
+     */
+    public function removeTag(\DoctBundle\Entity\Tags $tag)
+    {
+        $this->tags->removeElement($tag);
+    }
+
+    /**
+     * Get tags
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTags()
+    {
+        return $this->tags;
     }
 }
